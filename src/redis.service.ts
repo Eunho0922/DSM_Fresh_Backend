@@ -3,6 +3,7 @@ import { Redis } from 'ioredis';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './data/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RedisService {
@@ -10,9 +11,13 @@ export class RedisService {
 
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
+        private readonly userRepository: Repository<UserEntity>,
+        private configService: ConfigService
     ) {
-        this.redis = new Redis(); // Redis 연결
+        this.redis = new Redis({
+            host: this.configService.get<string>('REDIS_HOST') || 'localhost', // Redis 호스트
+            port: 6379 // Redis 포트
+        });
     }
 
     // 클릭 수 증가
