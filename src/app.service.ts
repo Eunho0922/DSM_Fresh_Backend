@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RedisService } from './redis.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { UserEntity } from './data/user.entity';
 
 @Injectable()
@@ -67,5 +67,22 @@ export class AppService {
 
     async getRanking(): Promise<any> {
         return await this.redisService.getRanking();
+    }
+
+    async delete(id: string): Promise<any> {
+        // const user = await this.typeormRepository.findOne({
+        //     where: {
+        //         id: id
+        //     }
+        // });
+
+        // if (!user) {
+        //     throw new NotFoundException(`해당하는 id(${id}의 사용자가 존재하지 않습니다.`);
+        // }
+
+        // await this.typeormRepository.delete({
+        //     id
+        // });
+        await this.redisService.deleteUser(id);
     }
 }

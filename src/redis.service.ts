@@ -63,4 +63,10 @@ export class RedisService {
         }
         return result;
     }
+
+    async deleteUser(deviceId: string): Promise<void> {
+        // Redis에서 제거
+        await this.redis.zrem('click_ranking', deviceId);
+        await this.redis.del(`user:${deviceId}:nickname`);
+    }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RequestUserForm } from './data/request.user.form';
 import { RedisService } from './redis.service';
@@ -46,5 +46,10 @@ export class AppController {
             const ranking = await this.redisService.getRanking();
             res.write(`data: ${JSON.stringify(ranking)}\n\n`);
         }, 1000); // 1초마다 전송
+    }
+
+    @Delete('delete/:id')
+    async delete(@Param('id') id: string) {
+        return await this.appService.delete(id);
     }
 }
