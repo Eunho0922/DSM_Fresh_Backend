@@ -70,19 +70,19 @@ export class AppService {
     }
 
     async delete(id: string): Promise<any> {
-        // const user = await this.typeormRepository.findOne({
-        //     where: {
-        //         id: id
-        //     }
-        // });
+        const user = await this.typeormRepository.findOne({
+            where: {
+                id: id
+            }
+        });
 
-        // if (!user) {
-        //     throw new NotFoundException(`해당하는 id(${id}의 사용자가 존재하지 않습니다.`);
-        // }
+        if (!user) {
+            throw new NotFoundException(`해당하는 id(${id}의 사용자가 존재하지 않습니다.`);
+        }
 
-        // await this.typeormRepository.delete({
-        //     id
-        // });
+        await this.typeormRepository.delete({
+            id
+        });
         await this.redisService.deleteUser(id);
     }
 }
