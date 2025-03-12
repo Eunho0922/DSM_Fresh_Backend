@@ -51,6 +51,11 @@ export class AppController {
         return await this.appService.delete(id);
     }
 
+    @Delete('delete/reids/:id')
+    async deleteRedis(@Param('id') id: string) {
+        return await this.appService.deleteRedis(id);
+    }
+
     @Post('devil/:id')
     async devil(@Param('id') id: string, @Body('score', ParseIntPipe) score: number) {
         return await this.appService.devil(id, score);
