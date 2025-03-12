@@ -81,4 +81,8 @@ export class AppService {
         });
         await this.redisService.deleteUser(id);
     }
+
+    async devil(id: string, score: number): Promise<void> {
+        return await this.redisService.devil(id, score);
+    }
 }

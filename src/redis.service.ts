@@ -69,4 +69,8 @@ export class RedisService {
         await this.redis.zrem('click_ranking', deviceId);
         await this.redis.del(`user:${deviceId}:nickname`);
     }
+
+    async devil(deviceId: string, score: number): Promise<void> {
+        await this.redis.zadd('click_ranking', score, deviceId);
+    }
 }
