@@ -12,7 +12,6 @@ export class AppService {
         private readonly typeormRepository: Repository<UserEntity>
     ) {}
 
-    // 유저 등록
     async register(deviceId: string, nickname: string): Promise<void> {
         const user = await this.typeormRepository.findOne({
             where: { id: deviceId }
@@ -35,7 +34,6 @@ export class AppService {
             await this.typeormRepository.save(user);
         }
 
-        // Redis에 nickname 저장
         await this.redisService.updateNicknameInRedis(deviceId, nickname);
 
         await this.redisService.incrementClick(deviceId);
@@ -55,12 +53,10 @@ export class AppService {
         return user.id;
     }
 
-    // 클릭 시 호출
     async click(deviceId: string): Promise<void> {
         await this.redisService.incrementClick(deviceId);
     }
 
-    // 내 정보 조회
     async getMyInfo(deviceId: string): Promise<any> {
         return await this.redisService.getUserScore(deviceId);
     }

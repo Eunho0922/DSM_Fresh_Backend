@@ -11,7 +11,6 @@ export class AppController {
         private readonly redisService: RedisService
     ) {}
 
-    // 기기 id와 닉네임으로 등록
     @Post('register')
     async register(@Body() form: RequestUserForm): Promise<void> {
         return await this.appService.register(form.deviceId, form.nickname);
@@ -22,7 +21,6 @@ export class AppController {
         return await this.appService.click(deviceId);
     }
 
-    // 내 정보 조회
     @Get('my-info/:id')
     async myInfo(@Param('id') deviceId: string): Promise<any> {
         const userId = await this.appService.findByUserId(deviceId);
@@ -45,7 +43,7 @@ export class AppController {
         setInterval(async () => {
             const ranking = await this.redisService.getRanking();
             res.write(`data: ${JSON.stringify(ranking)}\n\n`);
-        }, 1000); // 1초마다 전송
+        }, 1000); // 1초마다 랭킹 업데이트
     }
 
     @Delete('delete/:id')

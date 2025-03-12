@@ -19,6 +19,6 @@ export class RankingScheduler implements OnModuleInit {
                 await this.userRepository.update({ id: user.deviceId }, { clickCount: user.score });
             }
             console.log('✅ Redis → MySQL 저장 완료');
-        }, 30000); // 30초마다 동기화
+        }, 30000); // 30초마다 Redis & 데이터베이스 동기화
     }
 }
