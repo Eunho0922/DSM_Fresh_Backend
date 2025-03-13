@@ -21,6 +21,14 @@ export class AppController {
         return await this.appService.click(deviceId);
     }
 
+    @Post('clickNum/:id')
+    async clickNum(
+        @Param('id') deviceId: string,
+        @Body('num', ParseIntPipe) num: number
+    ): Promise<void> {
+        return await this.appService.clickNum(deviceId, num);
+    }
+
     @Get('my-info/:id')
     async myInfo(@Param('id') deviceId: string): Promise<any> {
         const userId = await this.appService.findByUserId(deviceId);

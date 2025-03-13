@@ -29,14 +29,13 @@ export class AppService {
             }
             // 새로운 유저
             await this.typeormRepository.save(new UserEntity(deviceId, nickname));
+            await this.redisService.updateNicknameInRedis(deviceId, nickname);
+            await this.redisService.incrementClick(deviceId);
         } else {
             user.nickname = nickname;
             await this.typeormRepository.save(user);
+            await this.redisService.updateNicknameInRedis(deviceId, nickname);
         }
-
-        await this.redisService.updateNicknameInRedis(deviceId, nickname);
-
-        await this.redisService.incrementClick(deviceId);
     }
 
     async findByUserId(deviceId: string): Promise<string> {
@@ -55,6 +54,10 @@ export class AppService {
 
     async click(deviceId: string): Promise<void> {
         await this.redisService.incrementClick(deviceId);
+    }
+
+    async clickNum(deviceId: string, num: number): Promise<void> {
+        await this.redisService.incrementNumClick(deviceId, num);
     }
 
     async getMyInfo(deviceId: string): Promise<any> {

@@ -25,6 +25,11 @@ export class RedisService {
         await this.redis.zincrby('click_ranking', 1, deviceId);
     }
 
+    // 원하는 클릭 수 증가
+    async incrementNumClick(deviceId: string, num: number): Promise<void> {
+        await this.redis.zincrby('click_ranking', num, deviceId);
+    }
+
     // 유저 정보가 변경될 때마다 Redis에 nickname을 저장
     async updateNicknameInRedis(deviceId: string, nickname: string): Promise<void> {
         await this.redis.set(`user:${deviceId}:nickname`, nickname);
