@@ -50,22 +50,23 @@ export class RedisService {
 
     // 상위 랭킹 가져오기
     async getRanking(): Promise<any> {
-        const ranking = await this.redis.zrevrange('click_ranking', 0, -1, 'WITHSCORES'); // 전체 랭킹 가져오기
+        const ranking = await this.redis.zrevrange('click_ranking', 0, -1, 'WITHSCORES');
         const result = [];
 
-        for (let i = 0; i < ranking.length; i += 2) {
-            const deviceId = ranking[i];
-            const score = parseInt(ranking[i + 1]);
+        const deviceIds = ranking.filter((_, index) => index % 2 === 0);
+        const scores = ranking.filter((_, index) => index % 2 === 1).map(Number);
 
-            // Redis에서 nickname을 바로 가져오기
-            const nickname = await this.redis.get(`user:${deviceId}:nickname`);
+        // 한 번에 nickname 가져오기 (MGET 사용)
+        const nicknames = await this.redis.mget(deviceIds.map((id) => `user:${id}:nickname`));
 
+        for (let i = 0; i < deviceIds.length; i++) {
             result.push({
-                deviceId,
-                nickname: nickname || 'Unknown', // Redis에 없으면 'Unknown'으로 설정
-                score
+                deviceId: deviceIds[i],
+                nickname: nicknames[i] || 'Unknown',
+                score: scores[i]
             });
         }
+
         return result;
     }
 
