@@ -51,7 +51,7 @@ export class AppController {
         setInterval(async () => {
             const ranking = await this.redisService.getRanking();
             res.write(`data: ${JSON.stringify(ranking)}\n\n`);
-        }, 1000); // 1초마다 랭킹 업데이트
+        }, 30000); // 30초마다 랭킹 업데이트
     }
 
     @Delete('delete/:id')
